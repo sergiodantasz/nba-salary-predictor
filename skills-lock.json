@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "conventional-commit": {
+      "source": "smithery.ai",
+      "sourceType": "well-known",
+      "computedHash": "3a41e04987f7d88c02e029b71746b1e5414d15ff5cd5f7b34cfe0ad3db29221f"
+    }
+  }
+}
