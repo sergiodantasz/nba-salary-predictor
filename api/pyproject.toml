@@ -11,5 +11,21 @@ dependencies = [
   "tensorflow-cpu>=2.21.0",
 ]
 
+[dependency-groups]
+dev = ["ruff>=0.15.22"]
+
 [tool.fastapi]
 entrypoint = "app.main:app"
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+target-version = "py313"
+
+[tool.ruff.lint]
+ignore = ["F401"]
+
+[tool.ruff.format]
+quote-style = "single"
+indent-style = "space"
+line-ending = "lf"
