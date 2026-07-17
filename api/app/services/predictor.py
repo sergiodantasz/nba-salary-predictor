@@ -15,14 +15,14 @@ _preprocessor: ColumnTransformer = load(PREPROCESSOR_PATH)
 
 
 def _format_season(year: int) -> str:
-    return f"{year - 1}-{str(year)[-2:]}"
+    return f'{year - 1}-{str(year)[-2:]}'
 
 
 def predict_salary(player: Player, year: int) -> PredictionResponse:
     df = pd.DataFrame([player.model_dump(by_alias=True)])
     X = _preprocessor.transform(df)
 
-    log_salary_share = _model.predict(X, verbose="0")
+    log_salary_share = _model.predict(X, verbose='0')
     salary_cap_ratio = float(np.expm1(log_salary_share[0][0]))
     salary_cap = SALARY_CAP_HISTORY[year]
     predicted_salary = round(salary_cap_ratio * salary_cap)

@@ -1,9 +1,9 @@
 from pathlib import Path
 
-ARTIFACTS_DIR = Path(__file__).resolve().parent.parent / "artifacts"
+ARTIFACTS_DIR = Path(__file__).resolve().parent.parent / 'artifacts'
 
-MODEL_PATH = ARTIFACTS_DIR / "model.keras"
-PREPROCESSOR_PATH = ARTIFACTS_DIR / "preprocessor.pkl"
+MODEL_PATH = ARTIFACTS_DIR / 'model.keras'
+PREPROCESSOR_PATH = ARTIFACTS_DIR / 'preprocessor.pkl'
 
 SALARY_CAP_HISTORY = {
     2017: 94_143_000,
