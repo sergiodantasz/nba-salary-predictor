@@ -1,10 +1,19 @@
 from enum import Enum
-from typing import Annotated
+from typing import Annotated, cast
 
+import numpy as np
+import pandas as pd
 from fastapi import Body, FastAPI, Query
+from joblib import load
+from keras import Model
+from keras.models import load_model
 from pydantic import BaseModel, Field, ValidationInfo, field_validator
+from sklearn.compose import ColumnTransformer
 
 app = FastAPI()
+
+model = cast(Model, load_model("artifacts/model.keras"))
+preprocessor: ColumnTransformer = load("artifacts/preprocessor.pkl")
 
 salary_cap_history = {
     2017: 94_143_000,
@@ -55,9 +64,21 @@ class Player(BaseModel):
         return value
 
 
+class Response(BaseModel):
+    salary_pct: float = Field(ge=0, le=1)
+    salary: float = Field(ge=0)
+
+
 @app.post("/predict/")
 def predict(
     player_stats: Annotated[Player, Body()],
     year: Annotated[int, Query(ge=2017, le=2026)],
 ):
-    return {"Hello": "World"}
+    df = pd.DataFrame([player_stats.model_dump(by_alias=True)])
+    X = preprocessor.transform(df)
+
+    log_pred = model.predict(X, verbose="0")
+    salary_pct = float(np.expm1(log_pred[0][0]))
+    salary = round(salary_pct * salary_cap_history[year])
+
+    return Response(salary_pct=salary_pct, salary=salary)
