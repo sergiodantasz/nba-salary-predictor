@@ -15,7 +15,7 @@ _preprocessor: ColumnTransformer = load(PREPROCESSOR_PATH)
 
 
 def _format_season(year: int) -> str:
-    return f"{year}-{str(year + 1)[-2:]}"
+    return f"{year - 1}-{str(year)[-2:]}"
 
 
 def predict_salary(player: Player, year: int) -> PredictionResponse:
