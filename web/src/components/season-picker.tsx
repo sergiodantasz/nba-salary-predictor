@@ -16,7 +16,7 @@ export function SeasonPicker({ value, onChange }: Props) {
             type='button'
             onClick={() => onChange(s.season)}
             className={clsx(
-              'flex flex-1 flex-col rounded-lg border px-4 py-2',
+              'flex flex-1 flex-col rounded-lg border px-3 py-1.5',
               isActive
                 ? 'border-orange-400 bg-orange-600/15'
                 : 'border-stone-700 opacity-80'
