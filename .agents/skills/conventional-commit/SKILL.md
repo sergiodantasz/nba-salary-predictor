@@ -22,30 +22,35 @@ appropriate commit messages.
    - `git diff --staged` to see already-staged changes
    - `git log --oneline -5` to see recent commit style
 
-2. **Classify each changed file** into a change type by inspecting its diff:
+2. **Classify changes at the hunk level**, not the file level. A single file
+   may contain hunks of different types or hunks that are semantically related
+   to changes in other files. Use `git diff` output to identify each hunk's
+   purpose:
    - **`style`** — diff is ONLY whitespace, formatting, or import reordering
    - **`docs`** — diff is ONLY comments or docstrings (no code changes)
    - **`refactor`** — diff renames symbols, extracts functions, moves code,
      or restructures without adding new behavior
    - **`fix`** — diff changes logic to correct incorrect behavior
    - **`feat`** — diff adds new fields, endpoints, parameters, or capabilities
-   - If a file contains **mixed types** (e.g., both a style reformat AND a
-     logic fix), split it into per-hunk changes using `git add -p` so each
-     hunk lands in the appropriate commit.
+   - Prefer **partial staging** (`git add -p`) over whole-file staging so
+     each hunk lands in its most appropriate commit, even when no single file
+     contains mixed types.
 
-3. **Group files by commit**:
-   - Merge files of the same type that share a **common scope** into a single
-     commit.
-   - If two files have different types OR affect unrelated modules, they
-     **must** go into separate commits.
+3. **Group hunks into commits by semantic relationship**:
+   - Merge hunks of the same type that share a **common scope** into a single
+     commit, regardless of which file they come from.
+   - If two hunks have **different types** or affect **unrelated modules**,
+     they **must** go into separate commits — even if they are in the same
+     file.
    - Order commits so that `refactor` and `style` come **before** `feat` or
      `fix` (to keep history clean and reduce conflicts when bisecting).
    - If there is only one logical group, produce a **single commit**.
 
 4. **For each group** (in order), do the following:
 
-   a. **Stage the group's files** with `git add <file1> <file2> ...` or
-      `git add -p <file>` for files with mixed hunks.
+   a. **Stage the group's hunks** using `git add -p <file>` for each file
+      that contains relevant hunks. Stage whole files with `git add <file>`
+      only when every hunk in the file belongs to the same group.
 
    b. **Determine the commit type** based on the group's classification:
       - `feat`: New feature or capability
